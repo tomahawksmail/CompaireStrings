@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>String Comparison Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>String Comparison Tool</h1>
+    <form method="POST">
+    <div class="input-group">
+        <label for="string1">Use copy/paste</label>
+        <input type="text" name="string1" placeholder="The string being tested" value="{{ s1 }}">
+    </div>
+
+    <div class="input-group">
+        <label for="string2">Type correct string</label>
+        <input type="text" name="string2" placeholder="Reference" value="{{ s2 }}">
+    </div>
+
+    <button type="submit">Compare</button>
+</form>
+
+    {% if summary %}
+    <div class="summary">{{ summary }}</div>
+    {% endif %}
+
+    {% if result %}
+    <table>
+        <tr>
+            <th>Char 1</th>
+            <th>ASCII/Unicode 1</th>
+            <th>Hex 1</th>
+            <th>|</th>
+            <th>Char 2</th>
+            <th>ASCII/Unicode 2</th>
+            <th>Hex 2</th>
+            <th>|</th>
+            <th>Match</th>
+        </tr>
+        {% for r in result %}
+        <tr class="{{ 'match' if r.equal else 'mismatch' }}">
+            <td>{{ r.c1 }}</td>
+            <td>{{ r.ascii1 }}</td>
+            <td>{{ r.hex1 }}</td>
+            <td>|</td>
+            <td>{{ r.c2 }}</td>
+            <td>{{ r.ascii2 }}</td>
+            <td>{{ r.hex2 }}</td>
+            <td>|</td>
+            <td>{{ '✔' if r.equal else '✖' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+</body>
+</html>
