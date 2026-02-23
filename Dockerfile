@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 4999
 
 # Start the app
-CMD ["gunicorn", "-b", "0.0.0.0:4999", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:4999", "main:app"]
