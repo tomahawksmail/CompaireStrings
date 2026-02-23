@@ -29,7 +29,8 @@ def compare_strings():
                 }
             except Exception as e:
                 domain_info = {"error": f"Could not fetch WHOIS info: {e}"}
-
+            else:
+                domain_info = "Could not fetch WHOIS info"
         # --- Compare strings character by character ---
         max_len = max(len(s1), len(s2))
         match = True
