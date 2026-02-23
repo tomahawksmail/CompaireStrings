@@ -23,14 +23,14 @@ def compare_strings():
                 domain_info = {
                     "domain": s1,
                     "registrar": w.registrar,
-                    "creation_date": (w.creation_date[0].strftime("%Y-%m-%d") if w.creation_date[0] else "N/A"),
-                    "expiration_date": (w.expiration_date[0].strftime("%Y-%m-%d") if w.expiration_date[0] else "N/A"),
+                    "creation_date": (w.creation_date[0].strftime("%Y-%m-%d") if w.creation_date[0] else w.creation_date),
+                    "expiration_date": (w.expiration_date[0].strftime("%Y-%m-%d") if w.expiration_date[0] else w.expiration_date),
                     "owner": getattr(w, "name", "Not available")
                 }
+                print(domain_info)
             except Exception as e:
                 domain_info = {"error": f"Could not fetch WHOIS info: {e}"}
-            else:
-                domain_info = "Could not fetch WHOIS info"
+
         # --- Compare strings character by character ---
         max_len = max(len(s1), len(s2))
         match = True
