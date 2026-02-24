@@ -21,7 +21,11 @@ h1 {
     color: #00ffcc;
     margin-bottom: 10px;
 }
-
+h2 {
+    text-align: center;
+    color: #00aeff;
+    margin-bottom: 10px;
+}
 /* Form and input styling */
 form {
     display: flex;
