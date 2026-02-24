@@ -2,27 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>String Comparison Tool</title>
+    <title>String Comparison & Domain Intelligence Tool</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 <div class="container">
-    <h1>String Comparison Tool</h1>
+    <h1>String Comparison & Domain Intelligence Tool</h1>
+
     <form method="POST">
-    <div class="input-group">
-        <label for="string1">Use copy/paste</label>
-        <input type="text" name="string1" placeholder="The string being tested" value="{{ s1 }}">
-    </div>
+        <div class="input-group">
+            <label>Use copy/paste</label>
+            <input type="text" name="string1" placeholder="Email or Domain or String" value="{{ s1 }}">
+        </div>
 
-    <div class="input-group">
-        <label for="string2">Type correct string</label>
-        <input type="text" name="string2" placeholder="Reference" value="{{ s2 }}">
-    </div>
+        <div class="input-group">
+            <label>Type correct string</label>
+            <input type="text" name="string2" placeholder="Reference string" value="{{ s2 }}">
+        </div>
 
-    <button type="submit">Compare</button>
-</form>
+        <button type="submit">Analyze</button>
+    </form>
 
+    <!-- ===================== -->
+    <!-- STRING SUMMARY -->
+    <!-- ===================== -->
     {% if summary %}
     <div class="summary">{{ summary }}</div>
     {% endif %}
@@ -31,12 +35,12 @@
     <table>
         <tr>
             <th>Char 1</th>
-            <th>ASCII/Unicode 1</th>
-            <th>Hex 1</th>
+            <th>ASCII</th>
+            <th>Hex</th>
             <th>|</th>
             <th>Char 2</th>
-            <th>ASCII/Unicode 2</th>
-            <th>Hex 2</th>
+            <th>ASCII</th>
+            <th>Hex</th>
             <th>|</th>
             <th>Match</th>
         </tr>
@@ -55,20 +59,115 @@
         {% endfor %}
     </table>
     {% endif %}
-    {% if domain_info %}
-<div class="domain-info">
-    <h2>Domain Info</h2>
-    {% if domain_info.error %}
-        <p style="color:#ff5555;">{{ domain_info.error }}</p>
-    {% else %}
-        <p><strong>Domain:</strong> {{ domain_info.domain }}</p>
-        <p><strong>Registrar:</strong> {{ domain_info.registrar }}</p>
-        <p><strong>Owner:</strong> {{ domain_info.owner }}</p>
-        <p><strong>Creation Date:</strong> {{ domain_info.creation_date }}</p>
-        <p><strong>Expiration Date:</strong> {{ domain_info.expiration_date }}</p>
+
+    <!-- ===================== -->
+    <!-- EMAIL INFO -->
+    <!-- ===================== -->
+    {% if email_info %}
+    <div class="domain-info">
+        <h2>Email Information</h2>
+        <p><strong>Email:</strong> {{ email_info.email }}</p>
+        <p><strong>Domain:</strong> {{ email_info.domain }}</p>
+        <p><strong>Valid:</strong> ✔</p>
+    </div>
     {% endif %}
-</div>
-{% endif %}
+
+    <!-- ===================== -->
+    <!-- DOMAIN INFO -->
+    <!-- ===================== -->
+    {% if domain_info %}
+    <div class="domain-info">
+        <h2>Domain Intelligence</h2>
+
+        {% if domain_info.whois_error %}
+            <p style="color:#ff5555;"><strong>WHOIS Error:</strong> {{ domain_info.whois_error }}</p>
+        {% endif %}
+
+        <p><strong>Domain:</strong> {{ domain_info.domain }}</p>
+
+        {% if domain_info.registrar %}
+        <p><strong>Registrar:</strong> {{ domain_info.registrar }}</p>
+        {% endif %}
+
+        {% if domain_info.owner %}
+        <p><strong>Owner:</strong> {{ domain_info.owner }}</p>
+        {% endif %}
+
+        {% if domain_info.creation_date %}
+        <p><strong>Created:</strong> {{ domain_info.creation_date }}</p>
+        {% endif %}
+
+        {% if domain_info.expiration_date %}
+        <p><strong>Expires:</strong> {{ domain_info.expiration_date }}</p>
+        {% endif %}
+
+        {% if domain_info.updated_date %}
+        <p><strong>Updated:</strong> {{ domain_info.updated_date }}</p>
+        {% endif %}
+
+        {% if domain_info.status %}
+        <p><strong>Status:</strong> {{ domain_info.status }}</p>
+        {% endif %}
+
+        {% if domain_info.name_servers %}
+        <p><strong>Name Servers:</strong></p>
+        <ul>
+            {% for ns in domain_info.name_servers %}
+            <li>{{ ns }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <!-- MX -->
+        <h3>MX Records</h3>
+        {% if domain_info.mx_found %}
+            <ul>
+            {% for mx in domain_info.mx_records %}
+                <li>Priority {{ mx[0] }} → {{ mx[1] }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No MX records found</p>
+        {% endif %}
+
+        <!-- A Records -->
+        <h3>IP Addresses (A Records)</h3>
+        {% if domain_info.ip_addresses %}
+            <ul>
+            {% for ip in domain_info.ip_addresses %}
+                <li>{{ ip }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No A records found</p>
+        {% endif %}
+
+        <!-- TXT -->
+        <h3>TXT Records</h3>
+        {% if domain_info.txt_records %}
+            <ul>
+            {% for txt in domain_info.txt_records %}
+                <li>{{ txt }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No TXT records found</p>
+        {% endif %}
+
+        <!-- DMARC -->
+        <h3>DMARC</h3>
+        {% if domain_info.dmarc %}
+            <ul>
+            {% for d in domain_info.dmarc %}
+                <li>{{ d }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No DMARC record found</p>
+        {% endif %}
+
+    </div>
+    {% endif %}
 
 </div>
 </body>
