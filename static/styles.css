@@ -22,7 +22,11 @@ h1 {
     margin-bottom: 10px;
 }
 h2 {
-    text-align: center;
+    color: #00aeff;
+    margin-bottom: 10px;
+}
+
+h3 {
     color: #00aeff;
     margin-bottom: 10px;
 }
