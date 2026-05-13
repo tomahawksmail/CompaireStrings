@@ -1,0 +1,10 @@
+services:
+  comparison:
+    image: dregistrygui.uskoinc.com/string-compare-app:1
+    build: .
+    ports:
+      - "4999:4999"
+    deploy:
+      replicas: 4
+      restart_policy:
+        condition: on-failure
